@@ -1,0 +1,20 @@
+[project]
+name = "natstat"
+version = "0.1.0"
+description = "A python interface for the National Statistical API"
+readme = "README.md"
+authors = [
+    { name = "jhelderman", email = "10335331+jhelderman@users.noreply.github.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.3.3",
+    "pydantic>=2.12.4",
+    "pydantic-settings>=2.12.0",
+    "python-dotenv>=1.2.1",
+    "requests>=2.32.5",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.2,<0.10.0"]
+build-backend = "uv_build"
