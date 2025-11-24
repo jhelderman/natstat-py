@@ -1,6 +1,6 @@
 import logging
 
-from fortuna.config import CONFIG
+from natstat.config import CONFIG
 
 _logger: logging.Logger | None = None
 
@@ -16,5 +16,5 @@ def get_logger():
     global _logger
     if _logger is None:
         configure_logger()
-        _logger = logging.getLogger("fortuna")
+        _logger = logging.getLogger("natstat")
     return _logger
