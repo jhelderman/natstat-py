@@ -20,4 +20,4 @@ from natstat.models.teamcodes import TeamCodesReq
 from natstat.models.teamperfs import TeamPerfsReq
 from natstat.models.teams import TeamsReq
 from natstat.models.venues import VenuesReq
-from natstat.paginated import paginated_get_all
+from natstat.paginated import PaginatedResp, paginated_get_all
