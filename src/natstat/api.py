@@ -2,6 +2,7 @@ import json
 from typing import Any
 
 import requests
+from ratelimit import limits, sleep_and_retry
 
 from natstat.config import CONFIG
 from natstat.log import get_logger
@@ -22,14 +23,13 @@ from natstat.models.teams import TeamsReq
 from natstat.models.venues import VenuesReq
 from natstat.util import format_range_offset_param
 
-RESULTS_PER_PAGE = 100
+HOUR = 60 * 60
 
 
 class NatStatError(Exception):
     def __init__(self, *args: object, resp: Any = None) -> None:
         super().__init__(*args)
         self.resp = resp
-        self.error = self  # for compatibility
 
 
 class EmptyResponseError(NatStatError):
@@ -47,7 +47,12 @@ class NoDataError(NatStatError):
         super().__init__(*args, resp=resp)
 
 
-class NatStat:
+class NoAPIKeyError(NatStatError):
+    def __init__(self, *args: object, resp: Any = None) -> None:
+        super().__init__(*args, resp=resp)
+
+
+class NatStatAPIv3:
     def __init__(
         self,
         api_key: str = CONFIG.natstat_api_key,
@@ -62,7 +67,14 @@ class NatStat:
         else:
             self.session = session
 
+    @sleep_and_retry
+    @limits(CONFIG.natstat_req_per_hour, HOUR)
     def get(self, path: str) -> NatStatResp | NatStatError:
+        if self.api_key == "":
+            return NoAPIKeyError(
+                "No API key was configured. This can be set via the NATSTAT_API_KEY "
+                "environmental variable or passed directly to the NatStatAPIv3 object."
+            )
         url = f"{self.base_url}/{self.api_key}/{path}"
         self.log.info(f"GET {path}")
         data = self.session.get(url).text
