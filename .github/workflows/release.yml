@@ -37,6 +37,11 @@ jobs:
         id: uv
         uses: astral-sh/setup-uv@v6
 
+      - name: Verify uv Installation
+        run: |
+          echo "Checking uv version:"
+          uv --version
+
       - name: Action | Semantic Version Release
         if: steps.uv.outcome == 'success'
         id: release
