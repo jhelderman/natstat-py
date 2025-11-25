@@ -53,22 +53,22 @@ jobs:
           git_committer_email: "actions@users.noreply.github.com"
           verbosity: "2"
 
-      # - name: Publish | Upload to GitHub Release Assets
-      #   uses: python-semantic-release/publish-action@v10.5.2
-      #   if: steps.release.outputs.released == 'true'
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     tag: ${{ steps.release.outputs.tag }}
-      #
-      # - name: Upload | Distribution Artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: distribution-artifacts
-      #     path: dist
-      #     if-no-files-found: error
-    #
-    # outputs:
-    #   released: ${{ steps.release.outputs.released || 'false' }}
+      - name: Publish | Upload to GitHub Release Assets
+        uses: python-semantic-release/publish-action@v10.5.2
+        if: steps.release.outputs.released == 'true'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.release.outputs.tag }}
+
+      - name: Upload | Distribution Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: distribution-artifacts
+          path: dist
+          if-no-files-found: error
+
+    outputs:
+      released: ${{ steps.release.outputs.released || 'false' }}
 
   # deploy:
   #   # 1. Separate out the deploy step from the publish step to run each step at
